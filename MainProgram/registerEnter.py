@@ -1,4 +1,4 @@
-import commonFunctions.py as cf
+import commonFunctions as cf
 import testCredentials as tc
 
 def Cadastrar():
@@ -38,3 +38,4 @@ def Cadastrar():
         # else: cf.Sair()
 
 def Logar():
+    print("Logando...")

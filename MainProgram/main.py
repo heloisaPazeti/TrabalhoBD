@@ -1,4 +1,5 @@
 import commonFunctions as cf
+import registerEnter as re
 
 def main() :
 
@@ -16,9 +17,9 @@ def Iniciar ():
     opt = input()
 
     if (opt == "1"):
-        Logar()
+        re.Logar()
     elif (opt == "2"):
-        Cadastrar()
+        re.Cadastrar()
     elif (opt == "3"):
         cf.Sair()
     else:
