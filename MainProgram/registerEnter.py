@@ -1,6 +1,4 @@
 import commonFunctions as cf
-import time
-
 
 # APENAS PARA TESTE
 import testCredentials as tc

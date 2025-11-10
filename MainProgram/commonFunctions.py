@@ -1,5 +1,6 @@
 import sys
 import os
+import time
 
 def Sair() :
     print("saindo....")
@@ -19,5 +20,6 @@ def Header(header):
         print("|           Logar             |")
     elif(header == 2):
         print("|          Cadastro           |")
-
+    elif(header == 3):
+        print("|            Menu             |")
     print("-------------------------------")
