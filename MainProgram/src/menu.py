@@ -15,8 +15,9 @@ def Menu():
     print("[1] Minhas Pesquisas")
     print("[2] Buscar")
     print("[3] Amostras / Exames")
-    print("[4] Deslogar")
-    print("[5] Sair")
+    print("[4] Adicionar Pesquisa")
+    print("[5] Deslogar")
+    print("[6] Sair")
 
     opt = input("\n Selecione uma opção: ")
 
@@ -27,8 +28,10 @@ def Menu():
     elif(opt == "3"):
         print("1")
     elif(opt == "4"):
-        return False
+        print("4")
     elif(opt == "5"):
+        return False
+    elif(opt == "6"):
         cf.Sair()
     else: 
         print("Comando inexistente...")

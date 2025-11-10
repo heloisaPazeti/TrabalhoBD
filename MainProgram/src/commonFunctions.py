@@ -6,11 +6,15 @@ def Sair() :
     print("saindo....")
     sys.exit()
 
-def Header(header):
-
+def LimparTela():
+    
     # clear = lambda: os.system('cls') # windows 
     clear = lambda: os.system('clear') # linux
     clear()
+
+def Header(header):
+
+    LimparTela()
 
     print("-------------------------------")
     
@@ -22,4 +26,6 @@ def Header(header):
         print("|          Cadastro           |")
     elif(header == 3):
         print("|            Menu             |")
+    elif(header == 4):
+        print("|      Minhas Pesquisas       |")
     print("-------------------------------")
