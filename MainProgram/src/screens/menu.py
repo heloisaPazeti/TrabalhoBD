@@ -1,11 +1,11 @@
-import commonFunctions as cf  
+from MainProgram.src.functions import commonFunctions as cf  
+
+from MainProgram.src.menuOptions import researches as res
+from MainProgram.src.menuOptions import search as sea
+from MainProgram.src.menuOptions import exams as ex
+
 import time
 import sys
-
-from menuOptions import researches as res
-from menuOptions import search as sea
-from menuOptions import exams as ex
-
 def Menu():
 
     result = True

@@ -1,5 +1,5 @@
-import commonFunctions as cf
-import registerEnter as re
+from MainProgram.src.functions import commonFunctions as cf
+from MainProgram.src.functions import registerEnter as re
 
 def main() :
 

@@ -1,4 +1,9 @@
-from src import commonFunctions as cf
+from MainProgram.src.functions import commonFunctions as cf
+from MainProgram.src.functions import testCredentials as tc
+
+from MainProgram.src.screens import menu
+
+import time
 
 def MinhasPesquisas():
     
@@ -17,18 +22,28 @@ def MinhasPesquisas():
    
     # listaPesquisa = {...}
 
+    listaPesquisas = tc.DummyPesquisas()
 
     print("[0] Voltar")
-    # for printando todo mundo da lista
+    
+    for i in range(len(listaPesquisas)):
+        print(f"[{i+1}] - {listaPesquisas[i].titulo}")
+
     opt = input("\n Selecione uma opcao: ")
 
 
     if(opt == "0"):
-        return True
-    #else:
-        #if(listaPesquisa[opt.toInt()] != Null):
-            #result = MostrarPesquisa(listaPesquisa[opt.toInt()])
-            #if(result): MinhasPesquisas
+        menu.Menu()
+    else:
+        index = int(opt)-1
+        if(index in range(len(listaPesquisas))):
+            result = MostrarPesquisa(listaPesquisas[index])
+            if(result): 
+                MinhasPesquisas()
+        else:
+            print("Parece que isso não é uma opção... Tente novamente...")
+            time.sleep(1.5)
+            MinhasPesquisas()
 
 def MostrarPesquisa(pesquisa):
 

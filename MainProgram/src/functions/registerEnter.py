@@ -1,9 +1,9 @@
-import commonFunctions as cf
+from MainProgram.src.functions import commonFunctions as cf
+from MainProgram.src.screens import menu
 import time
-import menu
 
 # APENAS PARA TESTE
-import testCredentials as tc
+from MainProgram.src.functions import testCredentials as tc
 
 def Cadastrar():
     

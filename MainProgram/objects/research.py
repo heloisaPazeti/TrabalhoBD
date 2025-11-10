@@ -1,4 +1,4 @@
-from src import commonFunctions as cf
+from MainProgram.src.functions import commonFunctions as cf
 
 class Pesquisa:
     def __init__(self, titulo, area, dtCriacao, universidade, pesqResponsa, pesqs, descricao):
@@ -11,7 +11,7 @@ class Pesquisa:
         self.pesqs = pesqs
         self.descricao = descricao
 
-    def MostrarPesquisa():
+    def MostrarPesquisa(self):
 
         cf.LimparTela()
 
