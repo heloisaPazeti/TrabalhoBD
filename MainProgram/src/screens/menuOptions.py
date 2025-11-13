@@ -10,10 +10,6 @@ def MinhasPesquisas():
     
     sc.Header(4)
     listaPesquisas = tc.DummyPesquisas()
-
-    print("[0] Voltar")
-    print("-------------------------------")
-
     result = sc.ListarPesquisas(listaPesquisas)
 
     if(result):
@@ -57,25 +53,6 @@ def Buscar():
 # -----------------------------------------------------
 def AdicionarPesquisa():
 
-    result = True
-
     sc.Header(6)
+    sc.Adicionar()
 
-    print("Adicione as seguintes informações:\n")
-    titulo = input("Titulo: ")
-    area = input("Área: ")
-    dtCriacao = input("Data de Criação (dd/mm/yyyy): ")
-    universidade = input("Universidade: ")
-    agFomento = input("Agência de Fomento: ")
-    pesqResponsa = input("Pesquisador Responsável: ")
-    pesqs = input("Pesquisadores (separar por , ): ")
-    desc = input("Descrição: ")
-
-    pesquisa = res.Pesquisa(titulo, area, dtCriacao, universidade, agFomento, pesqResponsa, pesqs, desc)
-
-    # result = Faz query de inserção
-    if(result == False):
-        print("Parece que algo deu errado... Tente Novamente mais tarde.")
-        sc.Esperar(1)
-
-    sc.Menu()

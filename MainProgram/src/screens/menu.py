@@ -10,10 +10,9 @@ def Menu():
     print("[1] Minhas Pesquisas")
     print("[2] Buscar")
     print("[3] Adicionar Pesquisa")
-    print("[4] Alterar Pesquisa")
-    print("[5] Deletar Pesquisa")
-    print("[6] Deslogar")
-    print("[7] Sair")
+    print("[4] Requisitar Exame / Amostra")
+    print("[5] Deslogar")
+    print("[6] Sair")
 
     opt = input("\nSelecione uma opção: ")
 
@@ -26,10 +25,8 @@ def Menu():
     elif(opt == "4"):
         print("4")
     elif(opt == "5"):
-        print("5")
-    elif(opt == "6"):
         sc.Iniciar()
-    elif(opt == "7"):
+    elif(opt == "6"):
         sc.Sair()
     else: 
         print("Comando inexistente...")

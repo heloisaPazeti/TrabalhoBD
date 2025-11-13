@@ -2,13 +2,11 @@ from MainProgram.src.screens import start
 from MainProgram.src.screens import loginAndRegister as lr 
 from MainProgram.src.screens import menu
 from MainProgram.src.screens import menuOptions as mo
-from MainProgram.src.screens import showResearch as sr
 
+from MainProgram.src.functions import researchFunctions as rf
 from MainProgram.src.functions import commonFunctions as cf
 import time
 import sys
-
-
 
 def Iniciar():
     start.Iniciar()
@@ -29,10 +27,15 @@ def Buscar():
     mo.Buscar()
 
 def AdicionarPesquisa():
-    mo.AdicionarPesquisa()
+    Header(6)
+    pesquisa = rf.EscreverPesquisa()
+    pesquisa.Adicionar()
 
 def ListarPesquisas(lista):
-    return sr.ListarPesquisas(lista)
+    return rf.ListarPesquisas(lista)
+
+def LimparTela():
+    cf.LimparTela()
 
 def Esperar(tempo):
     time.sleep(tempo)
