@@ -25,6 +25,7 @@ Relatório de todo o desenvolvimento do sistema. Dentro poderá ser encontrado:
 
 Programa utilizável com as seguintes pastas:
 
+```
  .
 ├──  MainProgram
 │   ├──  __init__.py
@@ -56,6 +57,7 @@ Programa utilizável com as seguintes pastas:
 │   └──  testFiles
 │       └──  registerTest.txt
 └── 󰂺 README.md
+```
 
 ## Rodando o Programa
 
