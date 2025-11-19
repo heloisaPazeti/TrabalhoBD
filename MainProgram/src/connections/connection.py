@@ -1,8 +1,15 @@
 import psycopg2
 
-def GetConnection():
+# ----------------------------------------------------------
+# FUNCAO: Retornar conexão e cursor
+# ----------------------------------------------------------
+# - Cria conexão
+# - Cria cursor
+# - Retorna ambos
+# ----------------------------------------------------------
+def GetConnectionAndCursor():
 
-    return psycopg2.connect(
+    conn = psycopg2.connect(
         host="localhost",
         port=5432,
         database="trabalhobd",
@@ -10,15 +17,6 @@ def GetConnection():
         password="4444"
     )
 
+    cursor = conn.cursor()
 
-def GetCursor():
-
-    conn = GetConnection()
-    return conn.cursor()
-
-def CloseConn(cursor, connection):
-
-    cursor.close()
-    connection.close()
-
-#def Rollback():
+    return conn, cursor

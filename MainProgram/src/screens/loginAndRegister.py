@@ -1,10 +1,21 @@
 from MainProgram.src.connections import connection as con
 from MainProgram.src.controllers import screenController as sc
 import psycopg2
-# APENAS PARA TESTE
-from MainProgram.src.functions import testCredentials as tc
 
-
+# ----------------------------------------------------------
+# FUNCAO: Cadastrar Pessoa
+# ----------------------------------------------------------
+# - Pega dados de cadastro
+# - Compara senhas
+# - Monta parâmetros bases
+# - Abre conexão e cursor
+# - Faz insert na tabela pessoa
+# - Faz insert na tabela enfermeiro (se for preciso)
+# - Faz insert na tabela medico (se for preciso)
+# - Utiliza try e except para pegar erros e printa erros
+# - Não retorna nada
+# - Fluxos: tela de login, tela de menu ou sai da aplicação
+# ----------------------------------------------------------
 def Cadastrar():
     result = True
     sc.Header(2)
@@ -29,7 +40,6 @@ def Cadastrar():
         print("As senhas não coincidem. Tente novamente.")
         senha2 = input("Insira a senha novamente: ")
 
-    # Parâmetros base
     parametros = {
         "cpf_bind": cpf,
         "nome_bind": name,
@@ -44,10 +54,9 @@ def Cadastrar():
         "senha_bind": senha,
     }
 
-    connection = con.GetConnection() 
-    cursor = connection.cursor()
-
     try:
+
+        connection, cursor = con.GetConnectionAndCursor() 
         sql = """
                 INSERT INTO PESSOA (CPF, NOME, UF, CIDADE, BAIRRO, RUA, NUMERO, TELEFONE1, TELEFONE2, DATA_NASC, SENHA)
                 VALUES (
@@ -97,7 +106,17 @@ def Cadastrar():
         else:
             sc.Sair()
 
-
+# ----------------------------------------------------------
+# FUNCAO: Logar
+# ----------------------------------------------------------
+# - Pega as informações ID e SENHA
+# - Faz conexão e cursor
+# - Seleciona senha ligada a ID e confere
+# - Executa comando e coleta resultado
+# - Erro 1: ID não localizado -> voltar para menu inicial
+# - Erro 2: senha não está correta para ID -> Tentar novamente
+# - Except -> erro com o banco -> menu inicial
+# ----------------------------------------------------------
 def Logar():
 
     sc.Header(1)
@@ -107,8 +126,7 @@ def Logar():
    
     try:
 
-        connection = con.GetConnection() 
-        cursor = connection.cursor()
+        connection, cursor = con.GetConnectionAndCursor() 
 
         sql_query = """
             SELECT SENHA 
@@ -127,7 +145,6 @@ def Logar():
 
         senha_bd = resultado[0]
 
-        # Comparar
         if senha == senha_bd:
             print("Credenciais aceitas!")
             sc.Esperar(0.5)
