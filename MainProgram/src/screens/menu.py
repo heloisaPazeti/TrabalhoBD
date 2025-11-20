@@ -19,11 +19,16 @@ def Menu():
     if(opt == "1"):
         sc.MinhasPesquisas()
     elif(opt == "2"):
-        sc.Buscar()
+        #sc.Buscar()
+        print("Esta opção ainda está em desenvolvimento...")
+        sc.Esperar(1.5)
+        sc.Menu()
     elif(opt == "3"):
         sc.AdicionarPesquisa()
     elif(opt == "4"):
-        print("4")
+        print("Esta opção ainda está em desenvolvimento...")
+        sc.Esperar(1.5)
+        sc.Menu()
     elif(opt == "5"):
         sc.Iniciar()
     elif(opt == "6"):

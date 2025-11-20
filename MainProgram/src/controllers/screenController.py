@@ -28,8 +28,9 @@ def Buscar():
 
 def AdicionarPesquisa():
     Header(6)
-    pesquisa = rf.EscreverPesquisa()
-    pesquisa.Adicionar()
+    mo.AdicionarPesquisa()
+    #pesquisa = rf.EscreverPesquisa()
+    #pesquisa.Adicionar()
 
 def ListarPesquisas(lista):
     return rf.ListarPesquisas(lista)
