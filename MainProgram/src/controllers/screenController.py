@@ -17,23 +17,21 @@ def Cadastrar():
 def Logar():
     lr.Logar()
 
-def Menu():
-    menu.Menu()
+def Menu(idPerson):
+    menu.Menu(idPerson)
 
-def MinhasPesquisas():
-    mo.MinhasPesquisas()
+def MinhasPesquisas(idPerson):
+    mo.MinhasPesquisas(idPerson)
 
 def Buscar():
     mo.Buscar()
 
-def AdicionarPesquisa():
+def AdicionarPesquisa(idPerson):
     Header(6)
-    mo.AdicionarPesquisa()
-    #pesquisa = rf.EscreverPesquisa()
-    #pesquisa.Adicionar()
+    mo.AdicionarPesquisa(idPerson)
 
-def ListarPesquisas(lista):
-    return rf.ListarPesquisas(lista)
+def ListarPesquisas(lista, idPerson):
+    return rf.ListarPesquisas(lista, idPerson)
 
 def LimparTela():
     cf.LimparTela()

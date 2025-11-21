@@ -6,52 +6,103 @@ import psycopg2
 # -----------------------------------------------------
 # LISTA PESQUISAS DA PESSOA LOGADA
 # -----------------------------------------------------
-def MinhasPesquisas():
+def MinhasPesquisas(idPerson):
     
     sc.Header(4)
-    listaPesquisas = tc.DummyPesquisas()
-    result = sc.ListarPesquisas(listaPesquisas)
 
-    if(result):
-        sc.MinhasPesquisas()
+    try:
+        
+        connection, cursor = con.GetConnectionAndCursor()
+
+        cursor.execute("""
+
+            SELECT PE.data_ingresso, PE.data_saida, E.TITULO, E.AREA, E.DATA_CRIACAO, P.descricao, U.NOME AS Universidade, A.NOME AS AgenciaFomento, F.VALOR AS ValorFinanciado
+            FROM Pesq_Exec PE 
+            JOIN Execucao E
+                ON pe.ID_Exec = e.ID
+            JOIN Universidade u 
+                ON e.CNPJ = u.CNPJ
+            JOIN pesquisa p 
+            	ON E.titulo = P.titulo 
+            	and E.area  = P.area 
+            	and E.data_criacao = P.data_criacao 
+            LEFT JOIN Financia f 
+                ON E.titulo  	  = f.Titulo
+                AND E.AREA 		  = f.Area
+                AND E.data_criacao = f.data_criacao 
+            LEFT JOIN Ag_Fomento a
+                ON f.CNPJ = a.CNPJ
+            WHERE pe.ID_Pesq = %s;
+        """, [idPerson])
+
+        result = cursor.fetchall()
+        cursor.close()
+
+        pesquisas = [
+            res.Pesquisa(
+                idPesq = idPerson,
+                titulo=row[2],
+                area=row[3],
+                dtCriacao=row[4],
+                descricao=row[5],
+                universidade=row[6],
+                agFomento=row[7],
+                valor=row[8],
+                dtEntrada=row[0],
+                dtSaida=row[1]
+            )
+
+            for row in result
+        ]
+
+        sc.ListarPesquisas(pesquisas, idPerson)
+
+    except psycopg2.Error as error:
+        connection.rollback()
+        print("Erro:", error)
+
+        input("Parece que algo deu errado... Pressione qualquer tecla para sair... ")
+        sc.Menu(idPerson)
+   
 
 # -----------------------------------------------------
 # TELA DE OPÇÕES DE BUSCA
 # -----------------------------------------------------
 def Buscar():
 
+    
     sc.Header(5)
 
-    print("Opções de Busca:")
-    print("[1] - Titulo")
-    print("[2] - Pesquisador")
-    print("[3] - Universidade")
-    print("[4] - Area")
-    print("[5] - Data de Criação")
-    print("[6] - Área")
-    print("[7] - Agência de Fomento")
+    #print("Opções de Busca:")
+    #print("[1] - Titulo")
+    #print("[2] - Pesquisador")
+    #print("[3] - Universidade")
+    #print("[4] - Area")
+    #print("[5] - Data de Criação")
+    #print("[6] - Área")
+    #print("[7] - Agência de Fomento")
 
-    print("-------------------------------")
-    print("[0] - Voltar")
-    print("-------------------------------")
-    opt = int(input("Selecione uma opção: "))
-    print("-------------------------------")
+    #print("-------------------------------")
+    #print("[0] - Voltar")
+    #print("-------------------------------")
+    #opt = int(input("Selecione uma opção: "))
+    #print("-------------------------------")
 
-    if(opt == 0):
-        sc.Menu()
-    else:
-        query = input("Escreva Busca: ")
+    #if(opt == 0):
+     #   sc.Menu()
+    #else:
+     #   query = input("Escreva Busca: ")
         # Aqui vai ter que fazer checagens para saber se a busca é válida ou não
         # Depois fazer a busca
         #result = sr.ListarPesquisas(listaPesquisas)
         #if(result):
             #Buscar()
-        sc.Menu()
+      #  sc.Menu()
 
 # -----------------------------------------------------
 # TELA PARA ADICIONAR PESQUISA 
 # -----------------------------------------------------
-def AdicionarPesquisa():
+def AdicionarPesquisa(idPerson):
 
     sc.Header(6)
     
@@ -115,15 +166,15 @@ def AdicionarPesquisa():
         
         connection.commit()
         cursor.close()
-        sc.Esperar(1)
-        sc.Menu()
+        print("Todos os valores foram adicionados ao banco de dados...")
+        sc.Esperar(1.5)
+        sc.Menu(idPerson)
 
     except psycopg2.Error as error:
         connection.rollback()
         print("Erro:", error)
 
         input("Parece que algo deu errado... Pressione qualquer tecla para sair... ")
-        sc.Menu()
-    #pesquisa = res.Pesquisa(titulo, area, dtCriacao, universidade, agFomento, pesqResponsa, pesqs, desc)
+        sc.Menu(idPerson)
    
 

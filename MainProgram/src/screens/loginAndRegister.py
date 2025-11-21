@@ -128,7 +128,7 @@ def Cadastrar():
             #connection.commit()
             print("Cadastro de Pesquisador Comum feito com sucessor!")
 
-        if pesquisadorC == "s":
+        elif pesquisadorC == "s":
 
             cursor.execute("""
                 INSERT INTO FUNCOES (ID, FUNCAO)
@@ -155,12 +155,12 @@ def Cadastrar():
             cursor.execute("""
                 INSERT INTO FUNCOES (ID, FUNCAO)
                 VALUES (%s, %s)
-            """, {person_id, 'PACIENTE'})
+            """, [person_id, 'PACIENTE'])
 
             cursor.execute("""
                 INSERT INTO PACIENTE (ID)
                 VALUES (%s)
-            """, {person_id})
+            """, [person_id])
 
 
         connection.commit()
@@ -220,7 +220,7 @@ def Logar():
         if senha == senha_bd:
             print("Credenciais aceitas!")
             sc.Esperar(0.5)
-            return sc.Menu()
+            return sc.Menu(id)
 
         else:
             print("Senha incorreta. Tente novamente...")

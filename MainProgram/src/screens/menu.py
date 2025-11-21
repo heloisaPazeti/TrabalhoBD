@@ -1,7 +1,7 @@
 from MainProgram.src.controllers import screenController as sc
 import time
 
-def Menu():
+def Menu(idPerson):
 
     result = True
 
@@ -17,18 +17,18 @@ def Menu():
     opt = input("\nSelecione uma opção: ")
 
     if(opt == "1"):
-        sc.MinhasPesquisas()
+        sc.MinhasPesquisas(idPerson)
     elif(opt == "2"):
         #sc.Buscar()
         print("Esta opção ainda está em desenvolvimento...")
         sc.Esperar(1.5)
-        sc.Menu()
+        sc.Menu(idPerson)
     elif(opt == "3"):
-        sc.AdicionarPesquisa()
+        sc.AdicionarPesquisa(idPerson)
     elif(opt == "4"):
         print("Esta opção ainda está em desenvolvimento...")
         sc.Esperar(1.5)
-        sc.Menu()
+        sc.Menu(idPerson)
     elif(opt == "5"):
         sc.Iniciar()
     elif(opt == "6"):
@@ -36,4 +36,4 @@ def Menu():
     else: 
         print("Comando inexistente...")
         time.sleep(1)
-        sc.Menu()
+        sc.Menu(idPerson)
