@@ -6,6 +6,10 @@ import psycopg2
 # -----------------------------------------------------
 # LISTA PESQUISAS DA PESSOA LOGADA
 # -----------------------------------------------------
+# - Faz um SELECT para trazer diversas informações
+# - Transforma em uma lista do objeto Pesquisa
+# - Passa essa lista para uma função que printa essas pesquisas
+# -----------------------------------------------------
 def MinhasPesquisas(idPerson):
     
     sc.Header(4)
@@ -64,43 +68,11 @@ def MinhasPesquisas(idPerson):
         input("Parece que algo deu errado... Pressione qualquer tecla para sair... ")
         sc.Menu(idPerson)
    
-
-# -----------------------------------------------------
-# TELA DE OPÇÕES DE BUSCA
-# -----------------------------------------------------
-def Buscar():
-
-    
-    sc.Header(5)
-
-    #print("Opções de Busca:")
-    #print("[1] - Titulo")
-    #print("[2] - Pesquisador")
-    #print("[3] - Universidade")
-    #print("[4] - Area")
-    #print("[5] - Data de Criação")
-    #print("[6] - Área")
-    #print("[7] - Agência de Fomento")
-
-    #print("-------------------------------")
-    #print("[0] - Voltar")
-    #print("-------------------------------")
-    #opt = int(input("Selecione uma opção: "))
-    #print("-------------------------------")
-
-    #if(opt == 0):
-     #   sc.Menu()
-    #else:
-     #   query = input("Escreva Busca: ")
-        # Aqui vai ter que fazer checagens para saber se a busca é válida ou não
-        # Depois fazer a busca
-        #result = sr.ListarPesquisas(listaPesquisas)
-        #if(result):
-            #Buscar()
-      #  sc.Menu()
-
 # -----------------------------------------------------
 # TELA PARA ADICIONAR PESQUISA 
+# -----------------------------------------------------
+# - Recolhe todos os dados de uma pesquisa
+# - Adiciona esses dados com um INSERT
 # -----------------------------------------------------
 def AdicionarPesquisa(idPerson):
 

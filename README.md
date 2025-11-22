@@ -24,40 +24,37 @@ Relatório de todo o desenvolvimento do sistema. Dentro poderá ser encontrado:
 ### Main Program
 
 Programa utilizável com as seguintes pastas:
-
-```
- .
-├──  MainProgram
-│   ├──  __init__.py
-│   ├──  main.py
-│   ├──  objects
-│   │   ├──  __init__.py
-│   │   └──  research.py
-│   ├──  sql
-│   │   └──  create_tables.sql
-│   ├── 󰣞 src
-│   │   ├──  __init__.py
-│   │   ├──  connections
-│   │   │   ├──  __init__.py
-│   │   │   └──  connection.py
-│   │   ├──  controllers
-│   │   │   ├──  __init__.py
-│   │   │   └──  screenController.py
-│   │   ├──  functions
-│   │   │   ├──  __init__.py
-│   │   │   ├──  commonFunctions.py
-│   │   │   ├──  researchFunctions.py
-│   │   │   └──  testCredentials.py
-│   │   └──  screens
-│   │       ├──  __init__.py
-│   │       ├──  loginAndRegister.py
-│   │       ├──  menu.py
-│   │       ├──  menuOptions.py
-│   │       └──  start.py
-│   └──  testFiles
-│       └──  registerTest.txt
-└── 󰂺 README.md
-```
+./
+├── MainProgram/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── objects/
+│   │   ├── __init__.py
+│   │   └── research.py
+│   ├── sql/
+│   │   ├── create_tables.sql
+│   │   ├── inserts.sql
+│   │   └── selects.sql
+│   └── src/
+│       ├── __init__.py
+│       ├── connections/
+│       │   ├── __init__.py
+│       │   └── connection.py
+│       ├── controllers/
+│       │   ├── __init__.py
+│       │   └── screenController.py
+│       ├── functions/
+│       │   ├── __init__.py
+│       │   ├── commonFunctions.py
+│       │   └── researchFunctions.py
+│       └── screens/
+│           ├── __init__.py
+│           ├── loginAndRegister.py
+│           ├── menu.py
+│           ├── menuOptions.py
+│           └── start.py
+├── TrabalhoBD.pdf
+└── README.md
 
 ## Rodando o Programa
 

@@ -8,6 +8,10 @@ from MainProgram.src.functions import commonFunctions as cf
 import time
 import sys
 
+# ---------------------------------------------------------------------------------
+# - Diversas funcoes com intuito de cuidar do fluxo da aplicação
+# - Futuramente deveria se tornar uma classe que já guarda a informação do IdPessoa
+# ---------------------------------------------------------------------------------
 def Iniciar():
     start.Iniciar()
 
@@ -22,9 +26,6 @@ def Menu(idPerson):
 
 def MinhasPesquisas(idPerson):
     mo.MinhasPesquisas(idPerson)
-
-def Buscar():
-    mo.Buscar()
 
 def AdicionarPesquisa(idPerson):
     Header(6)

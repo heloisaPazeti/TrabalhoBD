@@ -73,10 +73,7 @@ def Cadastrar():
         """ 
         cursor.execute(sql, parametros)
         person_id = cursor.fetchone()[0]
-        #connection.commit()
-        
         print("Cadastro de Pessoa realizado com sucesso!")
-
 
         if coren:
         
@@ -90,7 +87,6 @@ def Cadastrar():
                 VALUES (%s, %s)
             """, [person_id, 'ENFERMEIRO'])
 
-            #connection.commit()
             print("Cadastro de Enfermeiro feito com sucesso!")
 
         if crm:
@@ -105,7 +101,6 @@ def Cadastrar():
                 VALUES (%s, %s)
             """, [person_id, 'MEDICO'])
 
-            #connection.commit()
             print("Cadastro de Medico feito com sucesso!")
 
         if pesquisadorR == "s":
@@ -125,7 +120,6 @@ def Cadastrar():
                 VALUES (%s)
             """, [person_id])
 
-            #connection.commit()
             print("Cadastro de Pesquisador Comum feito com sucessor!")
 
         elif pesquisadorC == "s":
@@ -147,7 +141,6 @@ def Cadastrar():
                 VALUES (%s)
             """, [person_id])
 
-            #connection.commit()
             print("Cadastro de Pesquisador Comum feito com sucessor!")
 
         if paciente == "s":

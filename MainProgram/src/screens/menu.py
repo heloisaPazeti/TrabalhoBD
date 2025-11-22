@@ -1,6 +1,12 @@
 from MainProgram.src.controllers import screenController as sc
 import time
 
+# ----------------------------------------------------------
+# FUNCAO: Introduzir Menu Principal
+# ----------------------------------------------------------
+# - Abre opção de menu
+# - Leva para outras telas
+# ----------------------------------------------------------
 def Menu(idPerson):
 
     result = True
@@ -19,7 +25,6 @@ def Menu(idPerson):
     if(opt == "1"):
         sc.MinhasPesquisas(idPerson)
     elif(opt == "2"):
-        #sc.Buscar()
         print("Esta opção ainda está em desenvolvimento...")
         sc.Esperar(1.5)
         sc.Menu(idPerson)

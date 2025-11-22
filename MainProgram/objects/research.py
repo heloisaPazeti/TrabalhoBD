@@ -1,6 +1,12 @@
 from MainProgram.src.controllers import screenController as sc
 from MainProgram.src.functions import researchFunctions as rf
 
+# -----------------------------------------------------
+# Classe: objeto de pesquisas que é central na aplicação
+# -----------------------------------------------------
+# - Recebe parâmetros importantes
+# - Funcao MostrarPesquisa -> printa as informações
+# -----------------------------------------------------
 class Pesquisa:
     def __init__(self, idPesq, titulo, area, dtCriacao, descricao, universidade, agFomento, valor, dtEntrada, dtSaida):
 
