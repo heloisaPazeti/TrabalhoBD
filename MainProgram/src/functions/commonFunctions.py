@@ -28,4 +28,6 @@ def Header(header):
         print("|       Buscar Por Area       |")
     elif(header == 6):
         print("|   Adicionar Nova Pesquisa   |")
+    elif(header == 7):
+        print("|       Buscas Refinadas      |")
     print("-------------------------------")
