@@ -51,20 +51,20 @@ SELECT
     f.area,
     f.valor
 FROM FINANCIA f
-JOIN AG_FOMENTO ag ON ag.cnpj = f.cnpj
+JOIN AG_FOMENTO ag 
+      ON ag.cnpj = f.cnpj
 LEFT JOIN EXECUCAO e
-  ON e.data_criacao = f.data_criacao
- AND e.titulo       = f.titulo
- AND e.area         = f.area
+      ON e.data_criacao = f.data_criacao
+     AND e.titulo       = f.titulo
+     AND e.area         = f.area
 WHERE e.id IS NULL
 ORDER BY f.data_criacao;
+
 
 -- Seleciona pesquisas com número de amostras acima da média geral
 WITH pesquisa_amostras AS (
     SELECT
-        p.data_criacao,
-        p.titulo,
-        p.area,
+        p.id_pesquisa,
         COUNT(eda.id_amostra) AS total_amostras
     FROM PESQUISA p
     LEFT JOIN EXECUCAO e
@@ -73,17 +73,13 @@ WITH pesquisa_amostras AS (
           AND e.area         = p.area
     LEFT JOIN EXEC_DISP_AMOSTRA eda
            ON eda.id_exec = e.id
-    GROUP BY p.data_criacao, p.titulo, p.area
+    GROUP BY p.id_pesquisa
 ),
-media_geral AS (
-    SELECT AVG(total_amostras) AS media
-    FROM pesquisa_amostras
+pesquisas_acima_da_media AS (
+    SELECT pa.id_pesquisa
+    FROM pesquisa_amostras pa
+    WHERE pa.total_amostras > (SELECT AVG(total_amostras) FROM pesquisa_amostras)
 )
-SELECT pa.*
-FROM pesquisa_amostras pa, media_geral mg
-WHERE pa.total_amostras > mg.media;
-
-
 SELECT id_pesquisa
 FROM pesquisas_acima_da_media
 
@@ -95,8 +91,8 @@ JOIN AMOSTRA a ON a.id_pesquisa = p.id_pesquisa
 JOIN EXECUCAO e ON e.id_amostra = a.id_amostra
 ORDER BY id_pesquisa;
 
---- Hospitais que receberam amostras de todas as pesquisas financiadas por uma agência específica
 
+--- Hospitais que receberam amostras de todas as pesquisas financiadas por uma agência específica
 WITH pesquisas_agencia AS (
     SELECT id_pesquisa
     FROM PESQUISA
@@ -109,15 +105,16 @@ hospitais_que_receberam AS (
 SELECT h.id_hospital
 FROM HOSPITAL h
 WHERE NOT EXISTS (
-    SELECT *
+    SELECT 1
     FROM pesquisas_agencia pa
     WHERE NOT EXISTS (
-        SELECT *
+        SELECT 1
         FROM hospitais_que_receberam hq
         WHERE hq.id_hospital = h.id_hospital
           AND hq.id_pesquisa = pa.id_pesquisa
     )
 );
+
 
 -- Agências que financiam pesquisas executadas em hospitais onde nenhuma outra agência tem pesquisas
 WITH hospital_agencias AS (
@@ -135,11 +132,10 @@ WITH hospital_agencias AS (
      AND f.area         = e.area
 ),
 hospitais_unica_agencia AS (
-    -- hospitais que têm exatamente 1 agência associada (pelas disponibilizacoes/execucoes)
     SELECT hospital_id
     FROM hospital_agencias
     GROUP BY hospital_id
-    HAVING COUNT(*) = 1
+    HAVING COUNT(DISTINCT agencia_cnpj) = 1
 )
 SELECT DISTINCT ha.agencia_cnpj AS cnpj, ag.nome
 FROM hospital_agencias ha
@@ -147,10 +143,11 @@ JOIN hospitais_unica_agencia hua ON hua.hospital_id = ha.hospital_id
 JOIN AG_FOMENTO ag ON ag.cnpj = ha.agencia_cnpj
 ORDER BY ag.nome;
 
+
 -- Hospitais que receberam amostras ligadas a pesquisas financiadas por >1 agência
 SELECT 
-    est.nome                      AS nome_hospital,
-    COUNT(DISTINCT f.cnpj)        AS n_agencias_distintas
+    est.nome AS nome_hospital,
+    COUNT(DISTINCT f.cnpj) AS n_agencias_distintas
 FROM HOSPITAL_CLINICA h
 JOIN ESTAB_SAUDE est ON est.id = h.id
 JOIN DADOS_AMOSTRA da ON da.id_estab = est.id
