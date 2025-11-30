@@ -1,5 +1,3 @@
-BEGIN;
-
 -- 1) Agências de fomento (CNPJ no formato válido, ABRANGENCIA e PUBLICA)
 INSERT INTO AG_FOMENTO (cnpj, nome, abrangencia, publica) VALUES
 ('11111111/0001-01', 'FAPESP', 'NACIONAL', 'S'),
@@ -63,7 +61,7 @@ INSERT INTO AMOSTRA (categoria, data_coleta, id_pac, validade, info, estado, qtd
 ('SANGUE','2020-06-02', (SELECT id FROM PACIENTE WHERE id = (SELECT id FROM PESSOA WHERE cpf='111.111.111-11')), '2021-06-02', 'COVID B - col2', 'CONSERVADO', 1, (SELECT id FROM ENFERMEIRO WHERE id = (SELECT id FROM PESSOA WHERE cpf='333.333.333-33'))),
 ('SANGUE','2020-07-10', (SELECT id FROM PACIENTE WHERE id = (SELECT id FROM PESSOA WHERE cpf='222.222.222-22')), '2021-07-10', 'Oncologia A', 'CONSERVADO', 1, (SELECT id FROM ENFERMEIRO WHERE id = (SELECT id FROM PESSOA WHERE cpf='333.333.333-33'))),
 ('SALIVA','2020-08-15', (SELECT id FROM PACIENTE WHERE id = (SELECT id FROM PESSOA WHERE cpf='222.222.222-22')), '2021-08-15', 'Neuro A', 'CONSERVADO', 1, (SELECT id FROM ENFERMEIRO WHERE id = (SELECT id FROM PESSOA WHERE cpf='333.333.333-33'))),
-('URINA','2020-09-01', (SELECT id FROM PACIENTE WHERE id = (SELECT id FROM PESSOA WHERE cpf='111.111.111-11')), '2021-09-01', 'Fisio A', 'CONSERVADO', 1, (SELECT id FROM ENFERMEIRO WHERE id = (SELECT id FROM PESSOA WHERE cpf='333.333.333-33'));
+('URINA','2020-09-01', (SELECT id FROM PACIENTE WHERE id = (SELECT id FROM PESSOA WHERE cpf='111.111.111-11')), '2021-09-01', 'Fisio A', 'CONSERVADO', 1, (SELECT id FROM ENFERMEIRO WHERE id = (SELECT id FROM PESSOA WHERE cpf='333.333.333-33')));
 
 -- 12) Execucoes: para algumas pesquisas (obs: não criar execucao para COVID-Estudo2 e Metabolismo-Avancado para ativar "sem execução")
 INSERT INTO EXECUCAO (data_criacao, titulo, area, cnpj, data_inicio, data_conclusao) VALUES
@@ -144,5 +142,3 @@ INSERT INTO DISPONIBILIZACAO (id_exec, id_dados, data_entrega, data_devol) VALUE
   (SELECT id FROM DADOS_AMOSTRA WHERE dados LIKE 'Processado em Clinica Zona Norte'),
   '2020-08-12','2020-08-25'
 );
-
-COMMIT;
