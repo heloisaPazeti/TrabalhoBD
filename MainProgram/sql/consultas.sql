@@ -1,162 +1,132 @@
--- 1. SELECIONAR PARA UMA PESQUISA ESPECIFICA TODAS AS AMOSTRAS QUE AINDA NÃO FORAM DEVOLVIDAS
-select A.* from PESQUISA P join EXECUCAO E on (E.titulo = P.titulo and E.area = P.area and E.data_criacao = P.data_criacao)
-						   join DISPONIBILIZACAO D on E.id = D.id_exec
-						   join DADOS_AMOSTRA DD on DD.id = D.id_dados
-						   join AMOSTRA A on DD.id_amostra = A.id
-where NOW()<D.data_devol AND P.titulo = {titulo} and P.area={area} AND P.data_criacao={data};
+-- 1. Exibir quantidade de dados de amostras que uma pesquisa ainda nao devolveu
+SELECT
+    P.data_criacao,           -- Data de criação da pesquisa
+    P.titulo,                 -- Título da pesquisa
+    P.area,                   -- Área da pesquisa
+    COUNT(*) AS qtd_n_devolvida  -- Quantidade de dados ainda não devolvidos
+FROM PESQUISA P
+JOIN EXECUCAO E 
+      ON E.data_criacao = P.data_criacao  -- Junta a execução à pesquisa com base na data
+     AND E.titulo        = P.titulo      -- Junta pelo título da pesquisa
+     AND E.area          = P.area        -- Junta pela área da pesquisa
+JOIN DISPONIBILIZACAO D 
+      ON D.id_exec = E.id               -- Relaciona cada execução à sua disponibilização de amostras
+WHERE (D.data_devol IS NULL OR CURRENT_DATE < D.data_devol)  -- Filtra apenas amostras ainda não devolvidas
+GROUP BY 
+    P.data_criacao, 
+    P.titulo,
+    P.area                                 
+ORDER BY qtd_n_devolvida DESC;             -- Ordena do maior número de não devolvidas
 
--- 2. RETORNAR AS 5 PESQUISAS QUE MAIS UTILIZARAM AMOSTRAS
-select P.*, count(A.id) as total_amostras from PESQUISA P join EXECUCAO E on (E.titulo = P.titulo and E.area = P.area and E.data_criacao = P.data_criacao)
-						   join DISPONIBILIZACAO D on E.id = D.id_exec
-						   join DADOS_AMOSTRA DD on DD.id = D.id_dados
-						   join AMOSTRA A on DD.id_amostra = A.id
-group by P.data_criacao, P.tituLO, P.area , P.descricao
-order by total_amostras desc limit 5;
-
--- 3. REUNIR TODAS AS AMOSTRAS DE TODOS OS PACIENTES NASCIDOS NUM MÊS ESPECIFICO
-select A.* from AMOSTRA A join pessoa P on A.id_pac = P.id where EXTRACT(MONTH FROM p.data_nasc) = {mes};
-
--- 4. REUNIR TODAS AS EXECUÇÕES QUE RECEBE ACIMA DE UM VALOR ESPECÍFICO DA AG. DE FOMENTO
-select E.*, COUNT(EX.ID) as total_exames from EXECUCAO E join PESQUISA P on (P.titulo = E.titulo and P.area = E.area and P.data_criacao = E.data_criacao)
-						   join FINANCIA F on (P.titulo = F.titulo and P.area = F.area and P.data_criacao = F.data_criacao)
-where F.valor > 2000;
-
--- 5. REUNIR TODAS AS PESQUISAS RELACIONADAS A UM TAL LABORATORIO QUE TEM PACIENTES RELACIONADOS A TODOS OS ESTADOS
-select P.* from PESQUISA P join EXECUCAO E on (E.titulo = P.titulo and E.area = P.area and E.data_criacao = P.data_criacao)
-						   join DISPONIBILIZACAO D on D.id_exec = E.id
-						   join DADOS_AMOSTRA DA on DA.ID = D.id_dados
-						   join AMOSTRA A on A.ID=DA.id_amostra
-						   join PACIENTE Pa on A.id_pac = Pa.id
-						   join Pessoa Pe on Pa.id=Pe.id,
-						   join LAB_EXT LE on LE.ID = DA.id_estab
-group by P.data_criacao, P.titulo, P.area, P.descricao having count(distinct Pe.uf)=27;
--- 6. DIVISÃO: RETORNAR TODAS AS UNIVERSIDADES QUE TEM VÍNCULO - PELA PESQUISA - COM TODAS AS AGÊNCIAS DE FOMENTO.
-select U.* from UNIVERSIDADE U join EXECUCAO E on U.cnpj = E.cnpj
-							   join FINANCIA F on (E.titulo = F.titulo and E.area = F.area and E.data_criacao = F.data_criacao)
-							   join AG_FOMENTO A on A.CNPJ=F.CNPJ
-group by U.CNPJ, U.NOME having COUNT(distinct F.CNPJ) = (select count(distinct cnpj) from ag_fomento);
-
-
-
-
-
-
-
---MIGASSSS
--- Pesquisas financiadas sem execução associada
+-- 2. Retornar as 5 pesquisas que mais utilizaram amostras
 SELECT 
-    ag.nome,
-    f.data_criacao,
-    f.titulo,
-    f.area,
-    f.valor
-FROM FINANCIA f
-JOIN AG_FOMENTO ag 
-      ON ag.cnpj = f.cnpj
-LEFT JOIN EXECUCAO e
-      ON e.data_criacao = f.data_criacao
-     AND e.titulo       = f.titulo
-     AND e.area         = f.area
-WHERE e.id IS NULL
-ORDER BY f.data_criacao;
+    P.*,                     -- Seleciona todas as colunas da pesquisa
+    COUNT(A.id) AS total_amostras  -- Conta quantas amostras foram utilizadas em cada pesquisa
+FROM PESQUISA P
+JOIN EXECUCAO E 
+      ON E.titulo        = P.titulo
+     AND E.area          = P.area
+     AND E.data_criacao  = P.data_criacao
+JOIN DISPONIBILIZACAO D 
+      ON D.id_exec = E.id
+JOIN DADOS_AMOSTRA DD 
+      ON DD.id = D.id_dados
+JOIN AMOSTRA A 
+      ON A.id = DD.id_amostra
+GROUP BY 
+    P.data_criacao,
+    P.titulo,
+    P.area,
+    P.descricao                 -- Agrupa por todas as colunas relevantes da pesquisa
+ORDER BY 
+    total_amostras DESC         -- Ordena do maior para o menor número de amostras
+LIMIT 5;                        -- Retorna apenas as 5 pesquisas que mais usaram amostras
 
+-- 3. Estatísticas de amostras por mês e UF
+SELECT
+	TO_CHAR(A.data_coleta, 'mm') AS mes,  -- Converte a data de coleta para mês
+    TO_CHAR(A.data_coleta, 'YYYY') AS ano, -- Converte a data de coleta para ano
+    P.uf                             AS uf_pacientes,  -- Estado do paciente
+    COUNT(*)                         AS tipos_amostras_distintas, -- Total de registros de amostra
+    COUNT(DISTINCT A.id_pac)         AS pacientes_distintos,      -- Número de pacientes únicos
+    AVG(A.qtde)                       AS media_qtde,             -- Média de quantidade por amostra
+    MIN(A.qtde)                       AS min_qtde,               -- Quantidade mínima de amostra
+    MAX(A.qtde)                       AS max_qtde                -- Quantidade máxima de amostra
+FROM AMOSTRA A
+JOIN PESSOA P 
+    ON A.id_pac = P.id                 -- Junta cada amostra ao paciente correspondente
+GROUP BY 
+    TO_CHAR(A.data_coleta, 'YYYY'),    -- Agrupa por ano
+    TO_CHAR(A.data_coleta, 'mm'),      -- Agrupa por mês
+    P.uf                               -- Agrupa por estado
+ORDER BY 
+    mes, ano, uf_pacientes;           -- Ordena por mês, ano e estado
 
--- Seleciona pesquisas com número de amostras acima da média geral
-WITH pesquisa_amostras AS (
-    SELECT
-        p.id_pesquisa,
-        COUNT(eda.id_amostra) AS total_amostras
-    FROM PESQUISA p
-    LEFT JOIN EXECUCAO e
-           ON e.data_criacao = p.data_criacao
-          AND e.titulo       = p.titulo
-          AND e.area         = p.area
-    LEFT JOIN EXEC_DISP_AMOSTRA eda
-           ON eda.id_exec = e.id
-    GROUP BY p.id_pesquisa
-),
-pesquisas_acima_da_media AS (
-    SELECT pa.id_pesquisa
-    FROM pesquisa_amostras pa
-    WHERE pa.total_amostras > (SELECT AVG(total_amostras) FROM pesquisa_amostras)
+-- 4. Pesquisas com financiamento acima da média
+WITH media_valores AS (
+    SELECT AVG(valor) AS valor_medio    -- Calcula a média de todos os financiamentos
+    FROM FINANCIA
 )
-SELECT id_pesquisa
-FROM pesquisas_acima_da_media
-
-EXCEPT
-
-SELECT DISTINCT p.id_pesquisa
-FROM PESQUISA p
-JOIN AMOSTRA a ON a.id_pesquisa = p.id_pesquisa
-JOIN EXECUCAO e ON e.id_amostra = a.id_amostra
-ORDER BY id_pesquisa;
-
-
---- Hospitais que receberam amostras de todas as pesquisas financiadas por uma agência específica
-WITH pesquisas_agencia AS (
-    SELECT id_pesquisa
-    FROM PESQUISA
-    WHERE id_agencia = 2
-),
-hospitais_que_receberam AS (
-    SELECT DISTINCT id_hospital, id_pesquisa
-    FROM AMOSTRA
-)
-SELECT h.id_hospital
-FROM HOSPITAL h
-WHERE NOT EXISTS (
-    SELECT 1
-    FROM pesquisas_agencia pa
-    WHERE NOT EXISTS (
-        SELECT 1
-        FROM hospitais_que_receberam hq
-        WHERE hq.id_hospital = h.id_hospital
-          AND hq.id_pesquisa = pa.id_pesquisa
-    )
-);
-
-
--- Agências que financiam pesquisas executadas em hospitais onde nenhuma outra agência tem pesquisas
-WITH hospital_agencias AS (
-    SELECT DISTINCT
-        est.id        AS hospital_id,
-        f.cnpj        AS agencia_cnpj
-    FROM HOSPITAL_CLINICA h
-    JOIN ESTAB_SAUDE est ON est.id = h.id
-    JOIN DADOS_AMOSTRA da ON da.id_estab = est.id
-    JOIN DISPONIBILIZACAO dis ON dis.id_dados = da.id
-    JOIN EXECUCAO e ON e.id = dis.id_exec
-    JOIN FINANCIA f
-      ON f.data_criacao = e.data_criacao
-     AND f.titulo       = e.titulo
-     AND f.area         = e.area
-),
-hospitais_unica_agencia AS (
-    SELECT hospital_id
-    FROM hospital_agencias
-    GROUP BY hospital_id
-    HAVING COUNT(DISTINCT agencia_cnpj) = 1
-)
-SELECT DISTINCT ha.agencia_cnpj AS cnpj, ag.nome
-FROM hospital_agencias ha
-JOIN hospitais_unica_agencia hua ON hua.hospital_id = ha.hospital_id
-JOIN AG_FOMENTO ag ON ag.cnpj = ha.agencia_cnpj
-ORDER BY ag.nome;
-
-
--- Hospitais que receberam amostras ligadas a pesquisas financiadas por >1 agência
 SELECT 
-    est.nome AS nome_hospital,
-    COUNT(DISTINCT f.cnpj) AS n_agencias_distintas
-FROM HOSPITAL_CLINICA h
-JOIN ESTAB_SAUDE est ON est.id = h.id
-JOIN DADOS_AMOSTRA da ON da.id_estab = est.id
-JOIN DISPONIBILIZACAO dis ON dis.id_dados = da.id
-JOIN EXECUCAO e ON e.id = dis.id_exec
-JOIN FINANCIA f
-  ON f.data_criacao = e.data_criacao
- AND f.titulo       = e.titulo
- AND f.area         = e.area
-GROUP BY est.nome
-HAVING COUNT(DISTINCT f.cnpj) > 1
-ORDER BY n_agencias_distintas DESC, est.nome;
+    P.data_criacao,
+    P.titulo,
+    P.area,
+    F.valor AS valor_financiamento_pesquisa,  -- Valor do financiamento de cada pesquisa
+    F.cnpj as ag_fomento                      -- Agência de fomento que financiou
+FROM PESQUISA P
+JOIN FINANCIA F
+    ON F.titulo = P.titulo 
+   AND F.area = P.area 
+   AND F.data_criacao = P.data_criacao
+CROSS JOIN media_valores M                    -- Disponibiliza o valor médio em cada linha
+WHERE F.valor > M.valor_medio                 -- Seleciona apenas financiamentos acima da média
+ORDER BY P.data_criacao, P.titulo, F.valor DESC;
+
+-- 5.pesquisas relacionadas a um tal estabelecimento que tem pacientes relacionados a todos os estados.
+SELECT 
+    P.*
+FROM PESQUISA P
+JOIN EXECUCAO E 
+      ON E.titulo        = P.titulo
+     AND E.area          = P.area
+     AND E.data_criacao  = P.data_criacao
+JOIN DISPONIBILIZACAO D 
+      ON D.id_exec = E.id
+JOIN DADOS_AMOSTRA DA 
+      ON DA.id = D.id_dados
+JOIN AMOSTRA A 
+      ON A.id = DA.id_amostra
+JOIN PACIENTE Pa 
+      ON Pa.id = A.id_pac               -- Junta amostras aos pacientes
+JOIN PESSOA Pe 
+      ON Pe.id = Pa.id                  -- Obtém dados do paciente (incluindo UF)
+JOIN estab_saude ES 
+      ON ES.id = DA.id_estab            -- Junta com estabelecimento externo
+GROUP BY 
+    P.data_criacao,
+    P.titulo,
+    P.area,
+    P.descricao
+HAVING 
+    COUNT(DISTINCT Pe.uf) = 27;          -- Mantém apenas pesquisas com dados de 27 estados
+
+-- 6. Universidades vinculadas a todas as agências de fomento
+SELECT 
+    U.*
+FROM UNIVERSIDADE U
+JOIN EXECUCAO E 
+      ON U.cnpj = E.cnpj                  -- Relaciona universidades às execuções
+JOIN FINANCIA F 
+      ON F.titulo       = E.titulo
+     AND F.area         = E.area
+     AND F.data_criacao = E.data_criacao
+JOIN AG_FOMENTO A 
+      ON A.cnpj = F.cnpj                 -- Junta aos financiamentos das agências
+GROUP BY 
+    U.cnpj, 
+    U.nome
+HAVING 
+    COUNT(DISTINCT F.cnpj) = (           -- Mantém apenas universidades que receberam financiamento de todas as agências
+        SELECT COUNT(DISTINCT cnpj) 
+        FROM AG_FOMENTO
+    );
