@@ -19,7 +19,13 @@ def ListarPesquisas(listaPesquisas, idPerson):
     
     print("-------------------------------")
     opt = input("\n Selecione para ver detalhes: ")
-    index = int(opt)-1
+    if opt.isdigit():
+        index = int(opt)-1
+    else:
+        print("Parece que isso não é uma opção... Tente novamente...")
+        sc.Esperar(1.5)
+        sc.Menu(idPerson)
+        return False
     
     if(opt == "0"):
         sc.Menu(idPerson)
