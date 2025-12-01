@@ -24,38 +24,38 @@ Relatório de todo o desenvolvimento do sistema. Dentro poderá ser encontrado:
 ### Main Program
 
 Programa utilizável com as seguintes pastas:
-```
-./
-├── MainProgram/
+```.
+├── MainProgram
 │   ├── __init__.py
 │   ├── main.py
-│   ├── objects/
+│   ├── objects
 │   │   ├── __init__.py
 │   │   └── research.py
-│   ├── sql/
-│   │   ├── esquemas.sql
+│   ├── sql
+│   │   ├── consultas.sql
 │   │   ├── dados.sql
-│   │   └── consultas.sql
-│   └── src/
+│   │   └── esquema.sql
+│   └── src
 │       ├── __init__.py
-│       ├── connections/
+│       ├── connections
 │       │   ├── __init__.py
 │       │   └── connection.py
-│       ├── controllers/
+│       ├── controllers
 │       │   ├── __init__.py
 │       │   └── screenController.py
-│       ├── functions/
+│       ├── functions
 │       │   ├── __init__.py
 │       │   ├── commonFunctions.py
+│       │   ├── errors.py
 │       │   └── researchFunctions.py
-│       └── screens/
+│       └── screens
 │           ├── __init__.py
 │           ├── loginAndRegister.py
 │           ├── menu.py
 │           ├── menuOptions.py
 │           └── start.py
-├── TrabalhoBD.pdf
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 ## Rodando o Programa
 
@@ -69,6 +69,7 @@ Possivelmente será necessário o uso de um ambiente virtual devido aos pacotes 
 ``` bash
     python -m venv venv
     source venv/bin/activate
-    pip install psycopg2-binary
+    pip install -r requirements.txt
+    cd path/TrabalhoBD
     ~/venv/bin/python -m MainProgram.main
 ```
